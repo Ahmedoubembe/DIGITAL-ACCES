@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -32,6 +33,9 @@ public class BankingRequest {
 
     @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "code", length = 50)
+    private String code;
 
     @Column(name = "service_type", nullable = false, length = 50)
     private String serviceType;
@@ -78,7 +82,10 @@ public class BankingRequest {
         }
 
         String modCode = this.modificationType != null
-                ? this.modificationType.substring(0, Math.min(3, this.modificationType.length())).toUpperCase()
+                ? Normalizer.normalize(
+                this.modificationType.substring(0, Math.min(3, this.modificationType.length())),
+                Normalizer.Form.NFD
+        ).replaceAll("\\p{InCombiningDiacriticalMarks}", "").toUpperCase()
                 : "XXX";
 
         String timestamp = DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(this.createdDate);

@@ -60,6 +60,10 @@ public class BankingRequestController {
             logger.info("Soumission demande banking pour: {} - Service: {} - Type: {}",
                     phoneNumber, serviceType, modificationType);
 
+            String code = clientInfoRepository.findByPhoneNumber(phoneNumber.trim())
+                    .map(client -> client.getCustIden())
+                    .orElse(null);
+
             BankingRequest request = BankingRequest.builder()
                     .phoneNumber(phoneNumber.trim())
                     .clientName(clientName.trim())
@@ -68,7 +72,9 @@ public class BankingRequestController {
                     .modificationType(modificationType.trim())
                     .otherMessage(otherMessage != null ? otherMessage.trim() : null)
                     .status("PENDING")
+                    .code(code)
                     .build();
+
 
             BankingRequest savedRequest = bankingRequestService.createRequest(request);
 
