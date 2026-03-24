@@ -37,6 +37,9 @@ public class BankingRequest {
     @Column(name = "code", length = 50)
     private String code;
 
+    @Column(name = "agence", length = 6)
+    private String agence;
+
     @Column(name = "service_type", nullable = false, length = 50)
     private String serviceType;
 

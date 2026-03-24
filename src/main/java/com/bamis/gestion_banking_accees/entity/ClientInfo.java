@@ -30,4 +30,6 @@ public class ClientInfo {
     @Column(name = "wallet_code")
     private String walletCode;
 
+
+
 }
